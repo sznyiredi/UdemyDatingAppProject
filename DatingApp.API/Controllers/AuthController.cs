@@ -48,7 +48,8 @@ namespace DatingApp.API.Controllers
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
             //search for user account
-            var userFromRepo = _repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
+            var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
+                
             
             //if not found, return unauthorized
             if (userFromRepo == null)
@@ -56,7 +57,7 @@ namespace DatingApp.API.Controllers
             //start building a claim. it contains two claims(id and username)
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, userFromRepo.ID.ToString()),
                 new Claim(ClaimTypes.Name, userFromRepo.Username)              
             };
             //we have to sing the token to know if it is a valid key if it comes back
